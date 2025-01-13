@@ -1,4 +1,5 @@
 using MaintenancePrediction.ApiService.Data;
+using MaintenancePrediction.ApiService.Jobs;
 using MaintenancePrediction.ApiService.Middleware;
 using MaintenancePrediction.ApiService.Services;
 using MaintenancePrediction.ApiService.Services.Interfaces;
@@ -32,6 +33,19 @@ builder.Services.AddScoped<IMachineUsageService, MachineUsageService>();
 builder.Services.AddScoped<IMachineMaintenanceCheckResultService, MachineMaintenanceCheckResultService>();
 builder.Services.AddDbContext<MachineMaintenanceDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Add ML model service to the services.
+
+//builder.Services.AddHostedService<PredictionJob>();
+//builder.Services.AddScoped<IPredictionService, PredictionService>();
+
+//builder.Services.AddSingleton<MLModelWrapper>(sp =>
+//{
+//    var mlContext = new MLContext();
+//    var mlModelPath = "path/to/your/model.zip";
+//    var mlModel = mlContext.Model.Load(mlModelPath, out _);
+//    return new MLModelWrapper(mlModel, mlContext);
+//});
 
 builder.Services.AddEndpointsApiExplorer();
 //builder.Services.AddSwaggerGen(); // add swagger NuGet package
