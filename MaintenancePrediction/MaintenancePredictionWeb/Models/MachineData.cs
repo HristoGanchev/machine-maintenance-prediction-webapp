@@ -1,16 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace MaintenancePrediction.ApiService.Models
+﻿namespace MaintenancePrediction.Web.Models
 {
     public class MachineData
     {
-        [Key]
-        public int MachineId
-        {
-            get; set;
-        }
-
-        public string Name
+        public string MachineName
         {
             get; set;
         }
@@ -25,11 +17,6 @@ namespace MaintenancePrediction.ApiService.Models
         }
 
         public double CycleTimeThreshold
-        {
-            get; set;
-        }
-
-        public int CycleCountThreshold
         {
             get; set;
         }

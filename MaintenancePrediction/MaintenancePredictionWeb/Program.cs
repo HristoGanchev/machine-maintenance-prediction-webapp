@@ -1,4 +1,5 @@
 using MaintenancePrediction.Web.Components;
+using MaintenancePrediction.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +9,10 @@ builder.AddServiceDefaults();
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+// Add API services.
+builder.Services.AddScoped<MachineStatusService>();
+builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7134") }); // Replace with your API URL
 
 var app = builder.Build();
 

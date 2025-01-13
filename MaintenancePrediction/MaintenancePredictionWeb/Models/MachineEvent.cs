@@ -1,12 +1,9 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Runtime.InteropServices;
+﻿using System.Reflection.PortableExecutable;
 
-namespace MaintenancePrediction.ApiService.Data.Models
+namespace MaintenancePrediction.Web.Models
 {
     public class MachineEvent
     {
-        [Key]
         public int EventId
         {
             get; set;
@@ -15,7 +12,7 @@ namespace MaintenancePrediction.ApiService.Data.Models
         {
             get; set;
         }
-        public ApiService.Models.MachineData Machine
+        public MachineData Machine
         {
             get; set;
         } // Navigation property
@@ -27,10 +24,6 @@ namespace MaintenancePrediction.ApiService.Data.Models
         {
             get; set;
         }
-
-        [DataType(DataType.DateTime)]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm:ss}", ApplyFormatInEditMode = true)]
-        [DefaultValue("GetDate()")]
         public DateTime Timestamp
         {
             get; set;
