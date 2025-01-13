@@ -1,6 +1,6 @@
 ﻿using System.Reflection.PortableExecutable;
 
-namespace MaintenancePrediction.ApiService.Data.Models
+namespace MaintenancePrediction.ApiService.Models
 {
     public class MachineUsage
     {
@@ -8,7 +8,7 @@ namespace MaintenancePrediction.ApiService.Data.Models
         {
             get; set;
         }
-        public ApiService.Models.MachineData Machine
+        public MachineData Machine
         {
             get; set;
         } // Navigation property

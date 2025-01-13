@@ -1,4 +1,5 @@
 ﻿using MaintenancePrediction.ApiService.Services;
+using MaintenancePrediction.ApiService.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MaintenancePrediction.ApiService.Controllers
@@ -8,13 +9,18 @@ namespace MaintenancePrediction.ApiService.Controllers
     [Route("api/machine-status")]
     public class MachineStatusController : ControllerBase
     {
-        private readonly MachineUsageService _usageService;
-        private readonly MachineEventService _eventService;
+        private readonly IMachineUsageService _usageService;
+        private readonly IMachineEventService _eventService;
+        private readonly IMachineMaintenanceCheckResultService _maintenanceCheckResultService;
 
-        public MachineStatusController(MachineUsageService usageService, MachineEventService eventService)
+        public MachineStatusController(
+            IMachineUsageService usageService, 
+            IMachineEventService eventService,
+            IMachineMaintenanceCheckResultService maintenanceCheckResultService)
         {
             _usageService = usageService;
             _eventService = eventService;
+            _maintenanceCheckResultService = maintenanceCheckResultService;
         }
 
         [HttpPost("update-usage")]
@@ -43,6 +49,13 @@ namespace MaintenancePrediction.ApiService.Controllers
         {
             var events = await _eventService.GetEventsAsync(machineId);
             return Ok(events);
+        }
+
+        [HttpGet("maintenance-check/{machineId}")]
+        public async Task<IActionResult> GetMaintenanceCheckResult(int machineId)
+        {
+            var results = await _maintenanceCheckResultService.GetMachineMaintenanceCheckResultAsync(machineId);
+            return Ok(results);
         }
     }
 

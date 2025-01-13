@@ -1,4 +1,4 @@
-﻿namespace MaintenancePrediction.ApiService.Data.Models
+﻿namespace MaintenancePrediction.ApiService.Models
 {
     public class MachineMaintenanceCheckResult
     {
@@ -20,7 +20,7 @@
             set;
         }
 
-        public  int CycleCount
+        public int CycleCount
         {
             get;
             set;

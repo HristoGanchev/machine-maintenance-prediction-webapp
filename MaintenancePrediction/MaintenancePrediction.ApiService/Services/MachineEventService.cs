@@ -1,10 +1,11 @@
-﻿using MaintenancePrediction.ApiService.Data.Models;
-using MaintenancePrediction.ApiService.Data;
+﻿using MaintenancePrediction.ApiService.Data;
 using Microsoft.EntityFrameworkCore;
+using MaintenancePrediction.ApiService.Models;
+using MaintenancePrediction.ApiService.Services.Interfaces;
 
 namespace MaintenancePrediction.ApiService.Services
 {
-    public class MachineEventService
+    public class MachineEventService : IMachineEventService
     {
         private readonly MachineMaintenanceDbContext _context;
 
@@ -29,9 +30,14 @@ namespace MaintenancePrediction.ApiService.Services
 
         public async Task<IEnumerable<MachineEvent>> GetEventsAsync(int machineId)
         {
-            return await _context.MachineEvents
+            var responce = await _context.MachineEvents
                 .Where(e => e.MachineId == machineId)
                 .ToListAsync();
+            if (responce.Count() == 0)
+            {
+                return new List<MachineEvent>();
+            }
+            return responce;
         }
     }
 }

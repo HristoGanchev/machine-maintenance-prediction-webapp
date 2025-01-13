@@ -1,11 +1,12 @@
-﻿using MaintenancePrediction.ApiService.Data.Models;
-using MaintenancePrediction.ApiService.Data;
+﻿using MaintenancePrediction.ApiService.Data;
 using Microsoft.EntityFrameworkCore;
+using MaintenancePrediction.ApiService.Models;
+using MaintenancePrediction.ApiService.Services.Interfaces;
 
 namespace MaintenancePrediction.ApiService.Services
 {
     // Update and fetch machine usage data in a service.
-    public class MachineUsageService
+    public class MachineUsageService : IMachineUsageService
     {
         private readonly MachineMaintenanceDbContext _context;
 
@@ -40,7 +41,12 @@ namespace MaintenancePrediction.ApiService.Services
 
         public async Task<MachineUsage> GetUsageAsync(int machineId)
         {
-            return await _context.MachineUsages.FirstOrDefaultAsync(u => u.MachineId == machineId);
+            var responce = await _context.MachineUsages.FirstOrDefaultAsync(u => u.MachineId == machineId);
+            if (responce == null)
+            {
+                return new MachineUsage();
+            }
+            return responce;
         }
     }
 }

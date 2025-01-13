@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.InteropServices;
 
-namespace MaintenancePrediction.ApiService.Data.Models
+namespace MaintenancePrediction.ApiService.Models
 {
     public class MachineEvent
     {
@@ -15,7 +15,7 @@ namespace MaintenancePrediction.ApiService.Data.Models
         {
             get; set;
         }
-        public ApiService.Models.MachineData Machine
+        public MachineData Machine
         {
             get; set;
         } // Navigation property
