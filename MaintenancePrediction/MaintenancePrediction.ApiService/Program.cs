@@ -1,4 +1,7 @@
 using MaintenancePrediction.ApiService.Data;
+using MaintenancePrediction.ApiService.Middleware;
+using MaintenancePrediction.ApiService.Services;
+using MaintenancePrediction.ApiService.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,7 +26,10 @@ builder.Services.AddCors(options =>
 });
 
 // Add the database context to the services.
-// Add services to the container.
+builder.Services.AddScoped<IMachineDataService, MachineDataService>();
+builder.Services.AddScoped<IMachineEventService, MachineEventService>();
+builder.Services.AddScoped<IMachineUsageService, MachineUsageService>();
+builder.Services.AddScoped<IMachineMaintenanceCheckResultService, MachineMaintenanceCheckResultService>();
 builder.Services.AddDbContext<MachineMaintenanceDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -39,6 +45,8 @@ if (app.Environment.IsDevelopment())
 {
     //app.UseSwagger();
     //app.UseSwaggerUI();
+    app.MapHealthChecks("/health");
+    app.UseMiddleware<ErrorHandlingMiddleware>();
 }
 
 app.UseHttpsRedirection();

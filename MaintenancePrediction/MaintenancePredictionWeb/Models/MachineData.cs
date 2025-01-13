@@ -2,7 +2,12 @@
 {
     public class MachineData
     {
-        public string MachineName
+        public int MachineId
+        {
+            get; set;
+        }
+
+        public string Name
         {
             get; set;
         }
@@ -17,6 +22,11 @@
         }
 
         public double CycleTimeThreshold
+        {
+            get; set;
+        }
+
+        public int CycleCountThreshold
         {
             get; set;
         }

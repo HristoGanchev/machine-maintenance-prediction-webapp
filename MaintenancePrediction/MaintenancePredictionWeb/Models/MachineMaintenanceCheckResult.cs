@@ -20,7 +20,7 @@
             set;
         }
 
-        public  int CycleCount
+        public int CycleCount
         {
             get;
             set;

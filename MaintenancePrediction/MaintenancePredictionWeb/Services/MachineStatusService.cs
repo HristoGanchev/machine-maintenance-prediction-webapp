@@ -13,17 +13,17 @@ namespace MaintenancePrediction.Web.Services
             _httpClient = httpClient;
         }
 
-        public async Task<List<MachineEvent>> GetMachineEventsAsync(int machineId)
+        public async Task<List<MachineEvent>?> GetMachineEventsAsync(int machineId)
         {
             return await _httpClient.GetFromJsonAsync<List<MachineEvent>>($"api/machine-status/events/{machineId}");
         }
 
-        public async Task<MachineUsage> GetMachineUsageAsync(int machineId)
+        public async Task<MachineUsage?> GetMachineUsageAsync(int machineId)
         {
             return await _httpClient.GetFromJsonAsync<MachineUsage>($"api/machine-status/usage/{machineId}");
         }
 
-        public async Task<MachineMaintenanceCheckResult> GetMaintenanceCheckAsync(int machineId)
+        public async Task<MachineMaintenanceCheckResult?> GetMaintenanceCheckAsync(int machineId)
         {
             return await _httpClient.GetFromJsonAsync<MachineMaintenanceCheckResult>($"api/machine-status/maintenance-check/{machineId}");
         }

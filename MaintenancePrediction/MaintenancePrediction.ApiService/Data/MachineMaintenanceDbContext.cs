@@ -1,4 +1,4 @@
-﻿using MaintenancePrediction.ApiService.Data.Models;
+﻿using MaintenancePrediction.ApiService.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.PortableExecutable;
 

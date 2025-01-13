@@ -1,5 +1,4 @@
-﻿using System.Reflection.PortableExecutable;
-
+﻿
 namespace MaintenancePrediction.Web.Models
 {
     public class MachineEvent
@@ -16,6 +15,7 @@ namespace MaintenancePrediction.Web.Models
         {
             get; set;
         } // Navigation property
+
         public string EventCode
         {
             get; set;
@@ -24,6 +24,7 @@ namespace MaintenancePrediction.Web.Models
         {
             get; set;
         }
+
         public DateTime Timestamp
         {
             get; set;

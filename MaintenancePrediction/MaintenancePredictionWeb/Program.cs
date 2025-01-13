@@ -12,7 +12,12 @@ builder.Services.AddRazorComponents()
 
 // Add API services.
 builder.Services.AddScoped<MachineStatusService>();
-builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7134") }); // Replace with your API URL
+builder.Services.AddScoped(sp => new HttpClient { 
+    BaseAddress = new Uri("https://localhost:7134"), 
+    DefaultRequestHeaders = {
+        { "Accept", "application/json" }
+    }
+}); // Replace with your API URL
 
 var app = builder.Build();
 
