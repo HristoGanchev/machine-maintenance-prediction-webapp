@@ -1,0 +1,32 @@
+﻿@rendermode InteractiveServer
+
+<Sidebar2 Href="/"
+          IconName="IconName.Bootstrap"
+          Title="PM"
+          BadgeText="v0.0.1"
+          DataProvider="Sidebar2DataProvider"
+          WidthUnit="Unit.Px" />
+
+@code {
+    private IEnumerable<NavItem> navItems = default!;
+
+    private async Task<Sidebar2DataProviderResult> Sidebar2DataProvider(Sidebar2DataProviderRequest request)
+    {
+        if (navItems is null)
+            navItems = GetNavItems();
+
+        return await Task.FromResult(request.ApplyTo(navItems));
+    }
+
+    private IEnumerable<NavItem> GetNavItems()
+    {
+        navItems = new List<NavItem>
+        {
+            new NavItem { Id = "1", Href = "/", IconName = IconName.HouseDoorFill, Text = "Dashboard", Match=NavLinkMatch.All},
+            new NavItem { Id = "2", Href = "/alerts", IconName = IconName.File, Text = "Alerts"},
+            new NavItem { Id = "3", Href = "/reports", IconName = IconName.File, Text = "Reports"}
+        };
+
+        return navItems;
+    }
+}

@@ -1,0 +1,53 @@
+﻿@page "/alerts"
+@rendermode InteractiveServer
+@inject Services.MachineStatusService MachineStatusService
+
+<h3>Machine Alerts</h3>
+
+@if (events == null)
+{
+    <p>Loading alerts...</p>
+}
+else if (!events.Any())
+{
+    <p>No alerts found.</p>
+}
+else
+{
+    <Grid TItem="MachineEvent"
+          Class="table table-hover table-bordered table-striped"
+          DataProvider="EventsDataProvider"
+          AllowFiltering="true"
+          Responsive="true"
+          AllowPaging="true"
+          PageSize="15"
+          AllowDetailView="true">
+        <GridColumns>
+            <GridColumn TItem="MachineEvent" HeaderText="Event Code" PropertyName="EventCode">
+                @context.EventCode
+            </GridColumn>
+            <GridColumn TItem="MachineEvent" HeaderText="Description" PropertyName="Description">
+                @context.Description
+            </GridColumn>
+            <GridColumn TItem="MachineEvent" HeaderText="Timestamp" PropertyName="Timestamp">
+                @context.Timestamp.ToString("yyyy-MM-dd HH:mm:ss")
+            </GridColumn>
+        </GridColumns>
+    </Grid>
+}
+
+@code {
+    private List<MachineEvent> events;
+
+    protected override async Task OnInitializedAsync()
+    {
+        events = await MachineStatusService.GetMachineEventsAsync(machineId: 1);
+    }
+
+    private async Task<GridDataProviderResult<MachineEvent>> EventsDataProvider(GridDataProviderRequest<MachineEvent> request)
+    {
+        //Implement logic to page
+        return await Task.FromResult(request.ApplyTo(events));
+    }
+}
+

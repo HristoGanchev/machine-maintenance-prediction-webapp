@@ -17,7 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MaintenancePrediction.ApiService\MaintenancePrediction.ApiService.csproj" />
-    <ProjectReference Include="..\MaintenancePredictionWeb\MaintenancePrediction.Web.csproj" />
+    <ProjectReference Include="..\MaintenancePrediction.Web\MaintenancePrediction.Web.csproj" />
   </ItemGroup>
 
 </Project>

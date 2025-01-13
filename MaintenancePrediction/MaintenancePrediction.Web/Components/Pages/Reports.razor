@@ -1,0 +1,62 @@
+﻿@page "/reports"
+@rendermode InteractiveServer
+@inject Services.MachineStatusService MachineStatusService
+
+<h3>Machine Reports</h3>
+
+@if (events == null)
+{
+    <p>Loading reports...</p>
+}
+else
+{
+    <Grid TItem="MachineEvent"
+          Class="table table-hover table-bordered table-striped"
+          DataProvider="EventsDataProvider"
+          AllowFiltering="true"
+          Responsive="true"
+          AllowPaging="true"
+          PageSize="15"
+          AllowDetailView="true">
+        <GridColumns>
+            <GridColumn TItem="MachineEvent" HeaderText="Event Code" PropertyName="EventCode">
+                @context.EventCode
+            </GridColumn>
+            <GridColumn TItem="MachineEvent" HeaderText="Description" PropertyName="Description">
+                @context.Description
+            </GridColumn>
+            <GridColumn TItem="MachineEvent" HeaderText="Timestamp" PropertyName="Timestamp">
+                @context.Timestamp.ToString("yyyy-MM-dd HH:mm:ss")
+            </GridColumn>
+            <GridColumn TItem="MachineEvent" HeaderText="Actions" Filterable="false">
+                <Button Icon="fas fa-download" @onclick="DownloadReport" Class="btn btn-primary"></Button>
+            </GridColumn>
+        </GridColumns>
+    </Grid>
+}
+
+@code {
+    private List<MachineEvent> events;
+
+    protected override async Task OnInitializedAsync()
+    {
+        events = await MachineStatusService.GetMachineEventsAsync(machineId: 1);
+    }
+
+    private async Task<GridDataProviderResult<MachineEvent>> EventsDataProvider(GridDataProviderRequest<MachineEvent> request)
+    {
+        //Implement logic to page
+        return await Task.FromResult(request.ApplyTo(events));
+    }
+
+    private void DownloadReport()
+    {
+        var csvContent = "Event Code,Description,Timestamp\n" +
+                         string.Join("\n", events.Select(e => $"{e.EventCode},{e.Description},{e.Timestamp}"));
+        var byteArray = System.Text.Encoding.UTF8.GetBytes(csvContent);
+        //var csvData = new BlazorDownloadFileData(byteArray, "text/csv", "MachineEvents.csv");
+
+        //BlazorDownloadFileService.DownloadFile(csvData);
+    }
+}
+
