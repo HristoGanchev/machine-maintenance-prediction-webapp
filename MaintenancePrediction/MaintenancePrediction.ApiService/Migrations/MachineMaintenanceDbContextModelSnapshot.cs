@@ -22,99 +22,6 @@ namespace MaintenancePrediction.ApiService.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("MaintenancePrediction.ApiService.Data.Models.MachineEvent", b =>
-                {
-                    b.Property<int>("EventId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EventId"));
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("EventCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("MachineId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Timestamp")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("EventId");
-
-                    b.HasIndex("MachineId");
-
-                    b.ToTable("MachineEvents");
-
-                    b.HasData(
-                        new
-                        {
-                            EventId = 1,
-                            Description = "Routine maintenance performed",
-                            EventCode = "E100",
-                            MachineId = 1,
-                            Timestamp = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            EventId = 2,
-                            Description = "Overheating detected",
-                            EventCode = "E101",
-                            MachineId = 2,
-                            Timestamp = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        });
-                });
-
-            modelBuilder.Entity("MaintenancePrediction.ApiService.Data.Models.MachineMaintenanceCheckResult", b =>
-                {
-                    b.Property<int>("CycleCount")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CycleThreshold")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MachineId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Reason")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("RequiresMaintenance")
-                        .HasColumnType("bit");
-
-                    b.Property<double>("RuntimeHours")
-                        .HasColumnType("float");
-
-                    b.Property<double>("RuntimeThreshold")
-                        .HasColumnType("float");
-
-                    b.ToTable("MachineMaintenanceChecks");
-                });
-
-            modelBuilder.Entity("MaintenancePrediction.ApiService.Data.Models.MachineUsage", b =>
-                {
-                    b.Property<int>("CycleCount")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("LastUpdated")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("MachineId")
-                        .HasColumnType("int");
-
-                    b.Property<float>("RuntimeHours")
-                        .HasColumnType("real");
-
-                    b.HasIndex("MachineId");
-
-                    b.ToTable("MachineUsages");
-                });
-
             modelBuilder.Entity("MaintenancePrediction.ApiService.Models.MachineData", b =>
                 {
                     b.Property<int>("MachineId")
@@ -165,7 +72,104 @@ namespace MaintenancePrediction.ApiService.Migrations
                         });
                 });
 
-            modelBuilder.Entity("MaintenancePrediction.ApiService.Data.Models.MachineEvent", b =>
+            modelBuilder.Entity("MaintenancePrediction.ApiService.Models.MachineEvent", b =>
+                {
+                    b.Property<int>("EventId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EventId"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EventCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MachineId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Timestamp")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getdate()");
+
+                    b.HasKey("EventId");
+
+                    b.HasIndex("MachineId");
+
+                    b.ToTable("MachineEvents");
+
+                    b.HasData(
+                        new
+                        {
+                            EventId = 1,
+                            Description = "Routine maintenance performed",
+                            EventCode = "E100",
+                            MachineId = 1,
+                            Timestamp = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            EventId = 2,
+                            Description = "Overheating detected",
+                            EventCode = "E101",
+                            MachineId = 2,
+                            Timestamp = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
+                });
+
+            modelBuilder.Entity("MaintenancePrediction.ApiService.Models.MachineMaintenanceCheckResult", b =>
+                {
+                    b.Property<int>("CycleCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CycleThreshold")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MachineId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("RequiresMaintenance")
+                        .HasColumnType("bit");
+
+                    b.Property<double>("RuntimeHours")
+                        .HasColumnType("float");
+
+                    b.Property<double>("RuntimeThreshold")
+                        .HasColumnType("float");
+
+                    b.ToTable("MachineMaintenanceChecks");
+                });
+
+            modelBuilder.Entity("MaintenancePrediction.ApiService.Models.MachineUsage", b =>
+                {
+                    b.Property<int>("CycleCount")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("LastUpdated")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getdate()");
+
+                    b.Property<int>("MachineId")
+                        .HasColumnType("int");
+
+                    b.Property<float>("RuntimeHours")
+                        .HasColumnType("real");
+
+                    b.HasIndex("MachineId");
+
+                    b.ToTable("MachineUsages");
+                });
+
+            modelBuilder.Entity("MaintenancePrediction.ApiService.Models.MachineEvent", b =>
                 {
                     b.HasOne("MaintenancePrediction.ApiService.Models.MachineData", "Machine")
                         .WithMany()
@@ -176,7 +180,7 @@ namespace MaintenancePrediction.ApiService.Migrations
                     b.Navigation("Machine");
                 });
 
-            modelBuilder.Entity("MaintenancePrediction.ApiService.Data.Models.MachineUsage", b =>
+            modelBuilder.Entity("MaintenancePrediction.ApiService.Models.MachineUsage", b =>
                 {
                     b.HasOne("MaintenancePrediction.ApiService.Models.MachineData", "Machine")
                         .WithMany()

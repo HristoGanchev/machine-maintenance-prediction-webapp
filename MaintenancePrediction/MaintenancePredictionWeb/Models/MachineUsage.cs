@@ -8,10 +8,6 @@ namespace MaintenancePrediction.Web.Models
         {
             get; set;
         }
-        public MachineData Machine
-        {
-            get; set;
-        } // Navigation property
 
         public float RuntimeHours
         {
@@ -25,5 +21,9 @@ namespace MaintenancePrediction.Web.Models
         {
             get; set;
         }
+        public MachineData Machine
+        {
+            get; set;
+        } // Navigation property
     }
 }

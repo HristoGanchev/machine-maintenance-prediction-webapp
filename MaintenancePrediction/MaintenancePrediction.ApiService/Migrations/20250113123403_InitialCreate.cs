@@ -55,7 +55,7 @@ namespace MaintenancePrediction.ApiService.Migrations
                     MachineId = table.Column<int>(type: "int", nullable: false),
                     EventCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Timestamp = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Timestamp = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()")
                 },
                 constraints: table =>
                 {
@@ -75,7 +75,7 @@ namespace MaintenancePrediction.ApiService.Migrations
                     MachineId = table.Column<int>(type: "int", nullable: false),
                     RuntimeHours = table.Column<float>(type: "real", nullable: false),
                     CycleCount = table.Column<int>(type: "int", nullable: false),
-                    LastUpdated = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    LastUpdated = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()")
                 },
                 constraints: table =>
                 {
@@ -98,11 +98,11 @@ namespace MaintenancePrediction.ApiService.Migrations
 
             migrationBuilder.InsertData(
                 table: "MachineEvents",
-                columns: new[] { "EventId", "Description", "EventCode", "MachineId", "Timestamp" },
+                columns: new[] { "EventId", "Description", "EventCode", "MachineId" },
                 values: new object[,]
                 {
-                    { 1, "Routine maintenance performed", "E100", 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 2, "Overheating detected", "E101", 2, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) }
+                    { 1, "Routine maintenance performed", "E100", 1 },
+                    { 2, "Overheating detected", "E101", 2 }
                 });
 
             migrationBuilder.CreateIndex(

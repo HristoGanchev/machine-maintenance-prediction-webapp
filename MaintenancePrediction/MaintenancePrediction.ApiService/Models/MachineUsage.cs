@@ -1,5 +1,4 @@
-﻿using System.Reflection.PortableExecutable;
-
+﻿
 namespace MaintenancePrediction.ApiService.Models
 {
     public class MachineUsage
@@ -8,10 +7,6 @@ namespace MaintenancePrediction.ApiService.Models
         {
             get; set;
         }
-        public MachineData Machine
-        {
-            get; set;
-        } // Navigation property
 
         public float RuntimeHours
         {
@@ -21,9 +16,15 @@ namespace MaintenancePrediction.ApiService.Models
         {
             get; set;
         }
+
         public DateTime LastUpdated
         {
             get; set;
         }
+
+        public MachineData Machine
+        {
+            get; set;
+        } // Navigation property
     }
 }

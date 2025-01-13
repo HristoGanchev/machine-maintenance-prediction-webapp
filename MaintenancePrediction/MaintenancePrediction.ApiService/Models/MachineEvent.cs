@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Runtime.InteropServices;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace MaintenancePrediction.ApiService.Models
 {
@@ -15,10 +13,7 @@ namespace MaintenancePrediction.ApiService.Models
         {
             get; set;
         }
-        public MachineData Machine
-        {
-            get; set;
-        } // Navigation property
+
         public string EventCode
         {
             get; set;
@@ -28,12 +23,14 @@ namespace MaintenancePrediction.ApiService.Models
             get; set;
         }
 
-        [DataType(DataType.DateTime)]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm:ss}", ApplyFormatInEditMode = true)]
-        [DefaultValue("GetDate()")]
         public DateTime Timestamp
         {
             get; set;
         }
+
+        public MachineData Machine
+        {
+            get; set;
+        } // Navigation property
     }
 }

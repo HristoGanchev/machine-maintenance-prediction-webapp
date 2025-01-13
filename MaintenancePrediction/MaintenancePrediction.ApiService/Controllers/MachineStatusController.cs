@@ -23,11 +23,29 @@ namespace MaintenancePrediction.ApiService.Controllers
             _maintenanceCheckResultService = maintenanceCheckResultService;
         }
 
+        #region Usage
+        [HttpGet("usage/{machineId}")]
+        public async Task<IActionResult> GetUsage(int machineId)
+        {
+            var usage = await _usageService.GetUsageAsync(machineId);
+            return Ok(usage);
+        }
+
         [HttpPost("update-usage")]
         public async Task<IActionResult> UpdateUsage(int machineId, float hours, int cycles)
         {
             await _usageService.UpdateUsageAsync(machineId, hours, cycles);
             return Ok();
+        }
+
+        #endregion
+
+        #region Events
+        [HttpGet("events/{machineId}")]
+        public async Task<IActionResult> GetEvents(int machineId)
+        {
+            var events = await _eventService.GetEventsAsync(machineId);
+            return Ok(events);
         }
 
         [HttpPost("log-event")]
@@ -37,26 +55,15 @@ namespace MaintenancePrediction.ApiService.Controllers
             return Ok();
         }
 
-        [HttpGet("usage/{machineId}")]
-        public async Task<IActionResult> GetUsage(int machineId)
-        {
-            var usage = await _usageService.GetUsageAsync(machineId);
-            return Ok(usage);
-        }
+        #endregion
 
-        [HttpGet("events/{machineId}")]
-        public async Task<IActionResult> GetEvents(int machineId)
-        {
-            var events = await _eventService.GetEventsAsync(machineId);
-            return Ok(events);
-        }
-
+        #region Maintenance Check
         [HttpGet("maintenance-check/{machineId}")]
         public async Task<IActionResult> GetMaintenanceCheckResult(int machineId)
         {
             var results = await _maintenanceCheckResultService.GetMachineMaintenanceCheckResultAsync(machineId);
             return Ok(results);
         }
+        #endregion
     }
-
 }

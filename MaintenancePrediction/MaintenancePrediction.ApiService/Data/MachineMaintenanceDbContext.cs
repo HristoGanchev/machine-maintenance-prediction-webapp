@@ -29,25 +29,28 @@ namespace MaintenancePrediction.ApiService.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<ApiService.Models.MachineData>()
+            modelBuilder.Entity<MachineData>()
                 .HasMany<MachineEvent>()
                 .WithOne(e => e.Machine)
                 .HasForeignKey(e => e.MachineId);
 
             modelBuilder.Entity<MachineUsage>()
-                .HasNoKey();
+                .HasNoKey()
+                .Property(mu => mu.LastUpdated)
+                .HasDefaultValueSql("getdate()");
 
             modelBuilder.Entity<MachineEvent>()
-                .HasKey(me => me.EventId);
+                .Property(me => me.Timestamp)
+                .HasDefaultValueSql("getdate()");
 
             modelBuilder.Entity<MachineMaintenanceCheckResult>()
                 .HasNoKey();
 
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<ApiService.Models.MachineData>().HasData(
-                new ApiService.Models.MachineData { MachineId = 1, Name = "Hydraulic Press A1", Location = "Factory Floor 2", RuntimeThreshold = 500.0, CycleTimeThreshold = 2000, CycleCountThreshold = 50000 },
-                new ApiService.Models.MachineData { MachineId = 2, Name = "CNC Lathe B1", Location = "Workshop 1", RuntimeThreshold = 400.0, CycleTimeThreshold = 1500, CycleCountThreshold = 50000 }
+            modelBuilder.Entity<MachineData>().HasData(
+                new MachineData { MachineId = 1, Name = "Hydraulic Press A1", Location = "Factory Floor 2", RuntimeThreshold = 500.0, CycleTimeThreshold = 2000, CycleCountThreshold = 50000 },
+                new MachineData { MachineId = 2, Name = "CNC Lathe B1", Location = "Workshop 1", RuntimeThreshold = 400.0, CycleTimeThreshold = 1500, CycleCountThreshold = 50000 }
             );
 
             modelBuilder.Entity<MachineEvent>().HasData(

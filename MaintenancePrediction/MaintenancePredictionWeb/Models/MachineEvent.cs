@@ -11,10 +11,6 @@ namespace MaintenancePrediction.Web.Models
         {
             get; set;
         }
-        public MachineData Machine
-        {
-            get; set;
-        } // Navigation property
 
         public string EventCode
         {
@@ -29,5 +25,10 @@ namespace MaintenancePrediction.Web.Models
         {
             get; set;
         }
+
+        public MachineData Machine
+        {
+            get; set;
+        } // Navigation property
     }
 }
