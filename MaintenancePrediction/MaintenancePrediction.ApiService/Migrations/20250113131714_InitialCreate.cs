@@ -17,6 +17,8 @@ namespace MaintenancePrediction.ApiService.Migrations
                 name: "MachineMaintenanceChecks",
                 columns: table => new
                 {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     MachineId = table.Column<int>(type: "int", nullable: false),
                     RuntimeHours = table.Column<double>(type: "float", nullable: false),
                     RuntimeThreshold = table.Column<double>(type: "float", nullable: false),
@@ -27,6 +29,7 @@ namespace MaintenancePrediction.ApiService.Migrations
                 },
                 constraints: table =>
                 {
+                    table.PrimaryKey("PK_MachineMaintenanceChecks", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -72,19 +75,32 @@ namespace MaintenancePrediction.ApiService.Migrations
                 name: "MachineUsages",
                 columns: table => new
                 {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     MachineId = table.Column<int>(type: "int", nullable: false),
                     RuntimeHours = table.Column<float>(type: "real", nullable: false),
+                    CycleTime = table.Column<int>(type: "int", nullable: false),
                     CycleCount = table.Column<int>(type: "int", nullable: false),
                     LastUpdated = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()")
                 },
                 constraints: table =>
                 {
+                    table.PrimaryKey("PK_MachineUsages", x => x.Id);
                     table.ForeignKey(
                         name: "FK_MachineUsages_Machines_MachineId",
                         column: x => x.MachineId,
                         principalTable: "Machines",
                         principalColumn: "MachineId",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "MachineMaintenanceChecks",
+                columns: new[] { "Id", "CycleCount", "CycleThreshold", "MachineId", "Reason", "RequiresMaintenance", "RuntimeHours", "RuntimeThreshold" },
+                values: new object[,]
+                {
+                    { 1, 10000, 50000, 1, "No maintenance required", false, 2500.0, 500.0 },
+                    { 2, 20000, 50000, 2, "Overheating detected", true, 5500.0, 400.0 }
                 });
 
             migrationBuilder.InsertData(
@@ -103,6 +119,15 @@ namespace MaintenancePrediction.ApiService.Migrations
                 {
                     { 1, "Routine maintenance performed", "E100", 1 },
                     { 2, "Overheating detected", "E101", 2 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "MachineUsages",
+                columns: new[] { "Id", "CycleCount", "CycleTime", "MachineId", "RuntimeHours" },
+                values: new object[,]
+                {
+                    { 1, 10000, 8, 1, 2500f },
+                    { 2, 20000, 10, 2, 5500f }
                 });
 
             migrationBuilder.CreateIndex(

@@ -1,6 +1,5 @@
 ﻿using MaintenancePrediction.ApiService.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.PortableExecutable;
 
 namespace MaintenancePrediction.ApiService.Data
 {
@@ -9,7 +8,7 @@ namespace MaintenancePrediction.ApiService.Data
     {
         public MachineMaintenanceDbContext(DbContextOptions<MachineMaintenanceDbContext> options) : base(options) { }
 
-        public DbSet<ApiService.Models.MachineData> Machines
+        public DbSet<MachineData> Machines
         {
             get; set;
         }
@@ -35,7 +34,6 @@ namespace MaintenancePrediction.ApiService.Data
                 .HasForeignKey(e => e.MachineId);
 
             modelBuilder.Entity<MachineUsage>()
-                .HasNoKey()
                 .Property(mu => mu.LastUpdated)
                 .HasDefaultValueSql("getdate()");
 
@@ -43,8 +41,7 @@ namespace MaintenancePrediction.ApiService.Data
                 .Property(me => me.Timestamp)
                 .HasDefaultValueSql("getdate()");
 
-            modelBuilder.Entity<MachineMaintenanceCheckResult>()
-                .HasNoKey();
+            modelBuilder.Entity<MachineMaintenanceCheckResult>();
 
             base.OnModelCreating(modelBuilder);
 
@@ -56,6 +53,16 @@ namespace MaintenancePrediction.ApiService.Data
             modelBuilder.Entity<MachineEvent>().HasData(
                 new MachineEvent { EventId = 1, MachineId = 1, EventCode = "E100", Description = "Routine maintenance performed" },
                 new MachineEvent { EventId = 2, MachineId = 2, EventCode = "E101", Description = "Overheating detected" }
+            );
+
+            modelBuilder.Entity<MachineUsage>().HasData(
+                new MachineUsage { Id = 1, MachineId = 1, RuntimeHours = 2500, CycleCount = 10000, CycleTime = 8 },
+                new MachineUsage { Id = 2, MachineId = 2, RuntimeHours = 5500, CycleCount = 20000, CycleTime = 10 }
+            );
+
+            modelBuilder.Entity<MachineMaintenanceCheckResult>().HasData(
+                new MachineMaintenanceCheckResult { Id = 1, MachineId = 1, RuntimeHours = 2500, RuntimeThreshold = 500.0, CycleCount = 10000, CycleThreshold = 50000, RequiresMaintenance = false, Reason = "No maintenance required" },
+                new MachineMaintenanceCheckResult { Id = 2, MachineId = 2, RuntimeHours = 5500, RuntimeThreshold = 400.0, CycleCount = 20000, CycleThreshold = 50000, RequiresMaintenance = true, Reason = "Overheating detected" }
             );
         }
     }

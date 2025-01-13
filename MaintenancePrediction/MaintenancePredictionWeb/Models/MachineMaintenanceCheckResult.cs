@@ -2,6 +2,11 @@
 {
     public class MachineMaintenanceCheckResult
     {
+        public int Id
+        {
+            get;
+            set;
+        }
         public int MachineId
         {
             get;

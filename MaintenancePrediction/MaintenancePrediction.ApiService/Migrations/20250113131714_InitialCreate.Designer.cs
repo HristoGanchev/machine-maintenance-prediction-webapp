@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MaintenancePrediction.ApiService.Migrations
 {
     [DbContext(typeof(MachineMaintenanceDbContext))]
-    [Migration("20250113123403_InitialCreate")]
+    [Migration("20250113131714_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -126,6 +126,12 @@ namespace MaintenancePrediction.ApiService.Migrations
 
             modelBuilder.Entity("MaintenancePrediction.ApiService.Models.MachineMaintenanceCheckResult", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<int>("CycleCount")
                         .HasColumnType("int");
 
@@ -148,12 +154,47 @@ namespace MaintenancePrediction.ApiService.Migrations
                     b.Property<double>("RuntimeThreshold")
                         .HasColumnType("float");
 
+                    b.HasKey("Id");
+
                     b.ToTable("MachineMaintenanceChecks");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CycleCount = 10000,
+                            CycleThreshold = 50000,
+                            MachineId = 1,
+                            Reason = "No maintenance required",
+                            RequiresMaintenance = false,
+                            RuntimeHours = 2500.0,
+                            RuntimeThreshold = 500.0
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CycleCount = 20000,
+                            CycleThreshold = 50000,
+                            MachineId = 2,
+                            Reason = "Overheating detected",
+                            RequiresMaintenance = true,
+                            RuntimeHours = 5500.0,
+                            RuntimeThreshold = 400.0
+                        });
                 });
 
             modelBuilder.Entity("MaintenancePrediction.ApiService.Models.MachineUsage", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<int>("CycleCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CycleTime")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("LastUpdated")
@@ -167,9 +208,31 @@ namespace MaintenancePrediction.ApiService.Migrations
                     b.Property<float>("RuntimeHours")
                         .HasColumnType("real");
 
+                    b.HasKey("Id");
+
                     b.HasIndex("MachineId");
 
                     b.ToTable("MachineUsages");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CycleCount = 10000,
+                            CycleTime = 8,
+                            LastUpdated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            MachineId = 1,
+                            RuntimeHours = 2500f
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CycleCount = 20000,
+                            CycleTime = 10,
+                            LastUpdated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            MachineId = 2,
+                            RuntimeHours = 5500f
+                        });
                 });
 
             modelBuilder.Entity("MaintenancePrediction.ApiService.Models.MachineEvent", b =>

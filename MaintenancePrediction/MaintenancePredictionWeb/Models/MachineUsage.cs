@@ -4,12 +4,22 @@ namespace MaintenancePrediction.Web.Models
 {
     public class MachineUsage
     {
+        public int Id
+        {
+            get; set;
+        }
+
         public int MachineId
         {
             get; set;
         }
 
         public float RuntimeHours
+        {
+            get; set;
+        }
+
+        public int CycleTime
         {
             get; set;
         }

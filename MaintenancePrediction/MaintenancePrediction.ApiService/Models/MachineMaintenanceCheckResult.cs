@@ -1,7 +1,16 @@
-﻿namespace MaintenancePrediction.ApiService.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace MaintenancePrediction.ApiService.Models
 {
     public class MachineMaintenanceCheckResult
     {
+        [Key]
+        public int Id
+        {
+            get;
+            set;
+        }
+
         public int MachineId
         {
             get;
