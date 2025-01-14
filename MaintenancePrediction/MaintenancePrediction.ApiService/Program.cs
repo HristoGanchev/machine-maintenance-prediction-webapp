@@ -1,6 +1,7 @@
 using MaintenancePrediction.ApiService.Data;
 using MaintenancePrediction.ApiService.Jobs;
 using MaintenancePrediction.ApiService.Middleware;
+using MaintenancePrediction.ApiService.MLModels;
 using MaintenancePrediction.ApiService.Services;
 using MaintenancePrediction.ApiService.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -36,16 +37,17 @@ builder.Services.AddDbContext<MachineMaintenanceDbContext>(options =>
 
 // Add ML model service to the services.
 
-//builder.Services.AddHostedService<PredictionJob>();
-//builder.Services.AddScoped<IPredictionService, PredictionService>();
+builder.Services.AddScoped<IPredictionService, PredictionService>();
+builder.Services.AddHostedService<PredictionJob>();
 
-//builder.Services.AddSingleton<MLModelWrapper>(sp =>
-//{
-//    var mlContext = new MLContext();
-//    var mlModelPath = "path/to/your/model.zip";
-//    var mlModel = mlContext.Model.Load(mlModelPath, out _);
-//    return new MLModelWrapper(mlModel, mlContext);
-//});
+builder.Services.AddSingleton<MLModelWrapper>(sp =>
+{
+    //var mlContext = new MLContext();
+    var mlModelPath = "path/to/your/model.zip";
+    //var mlModel = mlContext.Model.Load(mlModelPath, out _);
+    //return new MLModelWrapper(mlModel, mlContext);
+    return new MLModelWrapper();
+});
 
 builder.Services.AddEndpointsApiExplorer();
 //builder.Services.AddSwaggerGen(); // add swagger NuGet package

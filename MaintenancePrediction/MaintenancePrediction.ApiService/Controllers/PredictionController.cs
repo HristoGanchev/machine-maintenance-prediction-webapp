@@ -2,9 +2,9 @@
 {
     using MaintenancePrediction.ApiService.Services;
     using MaintenancePrediction.ApiService.Services.Interfaces;
-    // Provides endpoints to predict maintenance events.
     using Microsoft.AspNetCore.Mvc;
 
+    // Provides endpoints to predict maintenance events.
     [ApiController]
     [Route("api/[controller]")]
     public class PredictionController : ControllerBase

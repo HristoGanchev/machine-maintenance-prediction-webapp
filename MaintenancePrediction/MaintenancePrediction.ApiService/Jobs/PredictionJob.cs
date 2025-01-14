@@ -3,6 +3,7 @@
     // Implements periodic predictions using Quartz.NET or BackgroundService.
 
     using MaintenancePrediction.ApiService.Services.Interfaces;
+    using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
     using System;
@@ -11,10 +12,10 @@
 
     public class PredictionJob : BackgroundService
     {
-        private readonly IPredictionService _predictionService;
+        private readonly IServiceProvider _predictionService;
         private readonly ILogger<PredictionJob> _logger;
 
-        public PredictionJob(IPredictionService predictionService, ILogger<PredictionJob> logger)
+        public PredictionJob(IServiceProvider predictionService, ILogger<PredictionJob> logger)
         {
             _predictionService = predictionService;
             _logger = logger;
@@ -24,14 +25,19 @@
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                try
+                using (var scope = _predictionService.CreateScope())
                 {
-                    _logger.LogInformation("Running Prediction Job at: {time}", DateTimeOffset.Now);
-                    await _predictionService.RunScheduledPredictionAsync();
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "Error occurred while running the prediction job.");
+                    try
+                    {
+                        var predictionService = scope.ServiceProvider.GetRequiredService<IPredictionService>();
+
+                        _logger.LogInformation("Running Prediction Job at: {time}", DateTimeOffset.Now);
+                        await predictionService.RunScheduledPredictionAsync();
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "Error occurred while running the prediction job.");
+                    }
                 }
 
                 // Wait for the next run (e.g., every hour)
