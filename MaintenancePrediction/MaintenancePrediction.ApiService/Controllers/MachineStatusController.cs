@@ -9,11 +9,13 @@ namespace MaintenancePrediction.ApiService.Controllers
     [Route("api/machine-status")]
     public class MachineStatusController : ControllerBase
     {
+        private readonly IMachineDataService _machineDataService;
         private readonly IMachineUsageService _usageService;
         private readonly IMachineEventService _eventService;
         private readonly IMachineMaintenanceCheckResultService _maintenanceCheckResultService;
 
         public MachineStatusController(
+            IMachineDataService machineDataService,
             IMachineUsageService usageService, 
             IMachineEventService eventService,
             IMachineMaintenanceCheckResultService maintenanceCheckResultService)
@@ -22,6 +24,16 @@ namespace MaintenancePrediction.ApiService.Controllers
             _eventService = eventService;
             _maintenanceCheckResultService = maintenanceCheckResultService;
         }
+
+        #region Machines
+        [HttpGet("machines")]
+        public async Task<IActionResult> GetMachines()
+        {
+            var machines = await _machineDataService.GetMachinesAsync();
+            return Ok(machines);
+        }
+
+        #endregion
 
         #region Usage
         [HttpGet("usage/{machineId}")]

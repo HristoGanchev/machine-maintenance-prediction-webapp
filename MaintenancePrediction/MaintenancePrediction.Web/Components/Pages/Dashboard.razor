@@ -4,50 +4,70 @@
 
 <h3>Machine Dashboard</h3>
 
-@if (usage == null || maintenanceCheck == null)
+@if (usage == null 
+|| maintenanceCheck == null
+|| machines == null)
 {
     <p>Loading dashboard...</p>
 }
 else
 {
-    <Card>
-        <CardBody>
-            <div>
-                <h4>Usage</h4>
-                <p>Runtime Hours: @usage.RuntimeHours</p>
-                <p>Cycle Count: @usage.CycleCount</p>
-                <p>Last Updated: @usage.LastUpdated.ToString("yyyy-MM-dd HH:mm:ss")</p>
-            </div>
+    <div class="row">
+        @foreach(MachineData machine in machines){
+            <div class="col-sm-6">
+                <Card>
+                    <CardHeader>
+                        <h3>Machine Status</h3>
+                    </CardHeader>
+                    <CardBody>
+                        <div>
+                            <h4>Usage</h4>
+                            <p>Runtime Hours: @usage.RuntimeHours</p>
+                            <p>Cycle Count: @usage.CycleCount</p>
+                            <p>Last Updated: @usage.LastUpdated.ToString("yyyy-MM-dd HH:mm:ss")</p>
+                        </div>
 
-            <div>
-                <h4>Maintenance Check</h4>
-                @if (maintenanceCheck.RequiresMaintenance)
-                {
-                    <p style="color: red;">Maintenance Required</p>
-                    <ul>
-                        @foreach (var reason in maintenanceCheck.Reason)
-                        {
-                            <li>@reason</li>
-                        }
-                    </ul>
-                }
-                else
-                {
-                    <p style="color: green;">All systems operational</p>
-                }
+                        <div>
+                            <h4>Maintenance Check</h4>
+                            @if (maintenanceCheck.RequiresMaintenance)
+                            {
+                                <p style="color: red;">Maintenance Required</p>
+                                <ul>
+                                    @foreach (var reason in maintenanceCheck.Reason)
+                                    {
+                                        <li>@reason</li>
+                                    }
+                                </ul>
+                            }
+                            else
+                            {
+                                <p style="color: green;">All systems operational</p>
+                            }
+                        </div>
+                    </CardBody>
+                    <CardFooter>
+                        <button class="btn btn-primary">Request Maintenance</button>
+                    </CardFooter>
+                </Card>
             </div>
-        </CardBody>
-    </Card>
+        }
+
+    </div>
+
+    <div class="row">
+        
+    </div>
 
 }
 
 @code {
-	private List<MachineData> machines;
+    private List<MachineData> machines;
     private MachineUsage usage;
     private MachineMaintenanceCheckResult maintenanceCheck;
 
     protected override async Task OnInitializedAsync()
     {
+        machines = await MachineStatusService.GetMachinesAsync();
         usage = await MachineStatusService.GetMachineUsageAsync(machineId: 1);
         maintenanceCheck = await MachineStatusService.GetMaintenanceCheckAsync(machineId: 1);
     }

@@ -13,6 +13,11 @@ namespace MaintenancePrediction.Web.Services
             _httpClient = httpClient;
         }
 
+        public async Task<List<MachineData>?> GetMachinesAsync()
+        {
+            return await _httpClient.GetFromJsonAsync<List<MachineData>>("api/machine-status/machines");
+        }
+
         public async Task<List<MachineEvent>?> GetMachineEventsAsync(int machineId)
         {
             return await _httpClient.GetFromJsonAsync<List<MachineEvent>>($"api/machine-status/events/{machineId}");

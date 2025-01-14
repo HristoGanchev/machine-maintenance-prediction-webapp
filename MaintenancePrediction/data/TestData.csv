@@ -1,0 +1,11 @@
+MachineID;RuntimeHours;CycleTime;CycleCount;LastMaintenanceDate;Status
+1;1200;15;80000;10/15/2023;Active
+2;950;20;60000;11/1/2023;Active
+3;1500;18;100000;9/20/2023;Active
+4;1800;22;110000;8/15/2023;MaintenanceRequired
+5;200;12;15000;12/5/2023;Active
+6;2100;25;130000;6/1/2023;MaintenanceRequired
+7;1750;19;95000;7/15/2023;Active
+8;700;16;40000;11/20/2023;Active
+9;1350;14;85000;9/1/2023;Active
+10;2200;23;140000;5/15/2023;MaintenanceRequired
