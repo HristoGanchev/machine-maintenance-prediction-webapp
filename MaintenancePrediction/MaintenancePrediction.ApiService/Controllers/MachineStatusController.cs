@@ -20,12 +20,20 @@ namespace MaintenancePrediction.ApiService.Controllers
             IMachineEventService eventService,
             IMachineMaintenanceCheckResultService maintenanceCheckResultService)
         {
+            _machineDataService = machineDataService;
             _usageService = usageService;
             _eventService = eventService;
             _maintenanceCheckResultService = maintenanceCheckResultService;
         }
 
         #region Machines
+        [HttpGet("machine/{machineId}")]
+        public async Task<IActionResult> GetMachine(int machineId)
+        {
+            var machine = await _machineDataService.GetMachineAsync(machineId);
+            return Ok(machine);
+        }
+
         [HttpGet("machines")]
         public async Task<IActionResult> GetMachines()
         {

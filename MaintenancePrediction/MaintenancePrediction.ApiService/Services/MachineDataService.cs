@@ -20,5 +20,11 @@ namespace MaintenancePrediction.ApiService.Services
             // Add logic to fetch machines from the database
             return await _context.Machines.ToListAsync();
         }
+
+        public async Task<MachineData> GetMachineAsync(int machineId)
+        {
+            // Add logic to fetch a machine by ID from the database
+            return await _context.Machines.FindAsync(machineId);
+        }
     }
 }

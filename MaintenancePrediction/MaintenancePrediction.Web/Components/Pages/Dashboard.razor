@@ -4,8 +4,8 @@
 
 <h3>Machine Dashboard</h3>
 
-@if (usage == null 
-|| maintenanceCheck == null
+@if (usages == null 
+|| maintenanceChecks == null
 || machines == null)
 {
     <p>Loading dashboard...</p>
@@ -13,62 +13,86 @@
 else
 {
     <div class="row">
-        @foreach(MachineData machine in machines){
+        @for (int i = 0; i < machines.Count; i++)
+        {
+            var li = i;
             <div class="col-sm-6">
                 <Card>
                     <CardHeader>
-                        <h3>Machine Status</h3>
+                        <h3>@machines[li].Name</h3>
+                        <h4>@machines[li].Location</h4>
                     </CardHeader>
                     <CardBody>
                         <div>
                             <h4>Usage</h4>
-                            <p>Runtime Hours: @usage.RuntimeHours</p>
-                            <p>Cycle Count: @usage.CycleCount</p>
-                            <p>Last Updated: @usage.LastUpdated.ToString("yyyy-MM-dd HH:mm:ss")</p>
+                            <p>Runtime Hours: @usages[li].RuntimeHours</p>
+                            <p>Cycle Count: @usages[li].CycleCount</p>
+                            <p>Last Updated: @usages[li].LastUpdated.ToString("yyyy-MM-dd HH:mm:ss")</p>
                         </div>
 
                         <div>
                             <h4>Maintenance Check</h4>
-                            @if (maintenanceCheck.RequiresMaintenance)
+                            @if (maintenanceChecks[li].RequiresMaintenance)
                             {
                                 <p style="color: red;">Maintenance Required</p>
-                                <ul>
-                                    @foreach (var reason in maintenanceCheck.Reason)
-                                    {
-                                        <li>@reason</li>
-                                    }
-                                </ul>
+                                <p>@maintenanceChecks[li].Reason</p>
                             }
                             else
                             {
                                 <p style="color: green;">All systems operational</p>
                             }
                         </div>
+                        <div>
+                            <h4>Maintenance Prediction</h4>
+                            <p>Prediction</p>
+                        </div>
                     </CardBody>
                     <CardFooter>
-                        <button class="btn btn-primary">Request Maintenance</button>
+                        <button class="btn btn-primary">Maintenance Check</button>
+                        <button class="btn btn-primary">Maintenance Prediction</button>
                     </CardFooter>
                 </Card>
             </div>
         }
-
     </div>
 
     <div class="row">
-        
+
     </div>
 
 }
 
 @code {
     private List<MachineData> machines;
-    private MachineUsage usage;
-    private MachineMaintenanceCheckResult maintenanceCheck;
+    private List<MachineUsage> usages;
+    private List<MachineMaintenanceCheckResult> maintenanceChecks;
 
     protected override async Task OnInitializedAsync()
     {
         machines = await MachineStatusService.GetMachinesAsync();
-        usage = await MachineStatusService.GetMachineUsageAsync(machineId: 1);
-        maintenanceCheck = await MachineStatusService.GetMaintenanceCheckAsync(machineId: 1);
+        if (machines != null)
+        {
+            usages = new List<MachineUsage>();
+			maintenanceChecks = new List<MachineMaintenanceCheckResult>();
+		};
+        foreach (MachineData machine in machines)
+        {
+			var usage = await MachineStatusService.GetMachineUsageAsync(machine.MachineId);
+			var maintenanceCheck = await MachineStatusService.GetMaintenanceCheckAsync(machine.MachineId);
+            usages.Add(usage);
+            maintenanceChecks.Add(maintenanceCheck);
+        }      
+    }
+
+	private async void MaintenanceCheck(int i, int machineId)
+	{
+		usages[i] = await MachineStatusService.GetMachineUsageAsync(machineId);
+        maintenanceChecks[i] = await MachineStatusService.GetMaintenanceCheckAsync(machineId);
+	}
+
+	private async void MaintenancePrediction(int i, int machineId)
+	{
+
     }
 }
+ 
