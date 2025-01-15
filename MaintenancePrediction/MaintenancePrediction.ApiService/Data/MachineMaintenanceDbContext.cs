@@ -8,20 +8,20 @@ namespace MaintenancePrediction.ApiService.Data
     {
         public MachineMaintenanceDbContext(DbContextOptions<MachineMaintenanceDbContext> options) : base(options) { }
 
-        public DbSet<MachineData> Machines
+        public virtual DbSet<MachineData> Machines
         {
             get; set;
         }
-        public DbSet<MachineUsage> MachineUsages
+        public virtual DbSet<MachineUsage> MachineUsages
         {
             get; set;
         }
-        public DbSet<MachineEvent> MachineEvents
+        public virtual DbSet<MachineEvent> MachineEvents
         {
             get; set;
         }
 
-        public DbSet<MachineMaintenanceCheckResult> MachineMaintenanceChecks
+        public virtual DbSet<MachineMaintenanceCheckResult> MachineMaintenanceChecks
         {
             get; set;
         }

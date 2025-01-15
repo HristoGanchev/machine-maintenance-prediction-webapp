@@ -48,7 +48,7 @@ else
                         </div>
                     </CardBody>
                     <CardFooter>
-                        <button class="btn btn-primary">Maintenance Check</button>
+                        <Button Color="ButtonColor.Primary" @onclick="() => MaintenanceCheck(li, li)">Maintenance Check</Button>
                         <button class="btn btn-primary">Maintenance Prediction</button>
                     </CardFooter>
                 </Card>
@@ -66,33 +66,76 @@ else
     private List<MachineData> machines;
     private List<MachineUsage> usages;
     private List<MachineMaintenanceCheckResult> maintenanceChecks;
+    private System.Timers.Timer? Timer;
 
     protected override async Task OnInitializedAsync()
     {
-        machines = await MachineStatusService.GetMachinesAsync();
-        if (machines != null)
-        {
-            usages = new List<MachineUsage>();
-			maintenanceChecks = new List<MachineMaintenanceCheckResult>();
-		};
-        foreach (MachineData machine in machines)
-        {
-			var usage = await MachineStatusService.GetMachineUsageAsync(machine.MachineId);
-			var maintenanceCheck = await MachineStatusService.GetMaintenanceCheckAsync(machine.MachineId);
-            usages.Add(usage);
-            maintenanceChecks.Add(maintenanceCheck);
-        }      
+        // Start the timer for periodic updates
+        Timer = new System.Timers.Timer(1000); // Update
+        Timer.Elapsed += async (sender, e) => await ForceUpdate();
+        Timer.AutoReset = true;
+        Timer.Start();
+
+        await UpdateDashboard();
     }
 
-	private async void MaintenanceCheck(int i, int machineId)
+    private async Task UpdateDashboard()
+    {
+        // Fetch data from the API
+        try
+        {
+            machines = await MachineStatusService.GetMachinesAsync();
+            if (machines != null)
+            {
+                usages = new List<MachineUsage>();
+                maintenanceChecks = new List<MachineMaintenanceCheckResult>();
+            };
+            foreach (MachineData machine in machines)
+            {
+                var usage = await MachineStatusService.GetMachineUsageAsync(machine.MachineId);
+                var maintenanceCheck = await MachineStatusService.GetMaintenanceCheckAsync(machine.MachineId);
+                usages.Add(usage);
+                maintenanceChecks.Add(maintenanceCheck);
+            }
+        }
+        catch (Exception ex)
+        {
+            ;
+        }
+    }
+
+    private async Task ForceUpdate()
+    {
+        await UpdateDashboard();
+
+        // Refresh UI
+        await InvokeAsync(StateHasChanged);
+    }
+
+
+	private async void MaintenanceCheckAsync(int i, int machineId)
 	{
-		usages[i] = await MachineStatusService.GetMachineUsageAsync(machineId);
+        usages[i] = await MachineStatusService.GetMachineUsageAsync(machineId);
         maintenanceChecks[i] = await MachineStatusService.GetMaintenanceCheckAsync(machineId);
+	}
+
+	public void MaintenanceCheck(int i, int machineId)
+	{
+        Task.Run(() => MaintenanceCheckAsync(i, machineId));
+
+        // Refresh page
+        StateHasChanged();
 	}
 
 	private async void MaintenancePrediction(int i, int machineId)
 	{
 
+    }
+
+    public void Dispose()
+    {
+        Timer?.Stop();
+        Timer?.Dispose();
     }
 }
  
