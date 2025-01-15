@@ -1,4 +1,4 @@
-namespace MaintenancePrediction.Tests
+namespace MaintenancePrediction.Tests.Integration_Tests
 {
     [TestClass]
     public class IntegrationTest1

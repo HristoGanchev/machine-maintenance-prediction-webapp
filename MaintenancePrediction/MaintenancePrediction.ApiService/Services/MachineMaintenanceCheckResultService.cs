@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using MaintenancePrediction.ApiService.Models;
 using MaintenancePrediction.ApiService.Services.Interfaces;
+using System.Reflection.PortableExecutable;
 
 namespace MaintenancePrediction.ApiService.Services
 {
@@ -28,26 +29,34 @@ namespace MaintenancePrediction.ApiService.Services
             return responce;
         }
 
-        public async Task<MachineMaintenanceCheckResult> GetMachineMaintenanceCheckResultMixinAsync(int machineId)
+        public async Task RunMachinesMaintenanceCheckResultMixinAsync()
         {
-            // Get the machine
-            var machine = await _context.Machines.FindAsync(machineId);
+            // Get the machines
+            var machines = await _context.Machines.ToListAsync();
 
+            foreach (var machine in machines)
+            {
+                await RunMachinesMaintenanceCheckResultMixinAsync(machine);
+            }    
+        }
+
+        private async Task RunMachinesMaintenanceCheckResultMixinAsync(MachineData machine)
+        {
             // Get the latest machine events
             var events = await _context.MachineEvents
-                .Where(e => e.MachineId == machineId)
+                .Where(e => e.MachineId == machine.MachineId)
                 .OrderByDescending(e => e.Timestamp)
                 .ToListAsync();
 
             // Get the latest machine usage
             var usage = await _context.MachineUsages
-                .Where(u => u.MachineId == machineId)
+                .Where(u => u.MachineId == machine.MachineId)
                 .OrderByDescending(u => u.LastUpdated)
                 .FirstOrDefaultAsync();
 
             // Get the latest machine maintenance check
             var responce = await _context.MachineMaintenanceChecks
-                .FirstOrDefaultAsync(e => e.MachineId == machineId);
+                .FirstOrDefaultAsync(e => e.MachineId == machine.MachineId);
 
             // Update the machine maintenance check
             if (responce == null)
@@ -57,24 +66,37 @@ namespace MaintenancePrediction.ApiService.Services
             }
             else
             {
-                responce.MachineId = machineId;
+                responce.MachineId = machine.MachineId;
                 responce.RuntimeHours = usage.RuntimeHours;
                 responce.CycleCount = usage.CycleCount;
                 responce.CycleThreshold = machine.CycleCountThreshold;
                 responce.RuntimeThreshold = machine.RuntimeThreshold;
 
                 responce.RequiresMaintenance = CheckMaintenanceRequired(responce);
+                responce.Reason = GetMaintenanceReason(responce);
 
                 _context.MachineMaintenanceChecks.Update(responce);
+                await _context.SaveChangesAsync();
             }
-
-            return responce;
         }
 
         private bool CheckMaintenanceRequired(MachineMaintenanceCheckResult results)
         {
             return results.RuntimeHours > results.RuntimeThreshold 
                 || results.CycleCount > results.CycleThreshold;
+        }
+
+        private string GetMaintenanceReason(MachineMaintenanceCheckResult results)
+        {
+            if (results.RuntimeHours > results.RuntimeThreshold)
+            {
+                return "Runtime hours exceeded threshold";
+            }
+            else if (results.CycleCount > results.CycleThreshold)
+            {
+                return "Cycle count exceeded threshold";
+            }
+            return "No maintenance required";
         }
     }
 }

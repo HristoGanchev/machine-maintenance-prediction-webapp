@@ -9,5 +9,7 @@ namespace MaintenancePrediction.ApiService.Services.Interfaces
         //Task<MachineMaintenanceCheckResult> CreateMachineMaintenanceCheckResultAsync(MachineMaintenanceCheckResult machineMaintenanceCheckResult);
         //Task<MachineMaintenanceCheckResult> UpdateMachineMaintenanceCheckResultAsync(int id, MachineMaintenanceCheckResult machineMaintenanceCheckResult);
         //Task DeleteMachineMaintenanceCheckResultAsync(int id);
+
+        Task RunMachinesMaintenanceCheckResultMixinAsync();
     }
 }

@@ -36,9 +36,7 @@ builder.Services.AddDbContext<MachineMaintenanceDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Add ML model service to the services.
-
 builder.Services.AddScoped<IPredictionService, PredictionService>();
-builder.Services.AddHostedService<PredictionJob>();
 
 builder.Services.AddSingleton<MLModelWrapper>(sp =>
 {
@@ -48,6 +46,10 @@ builder.Services.AddSingleton<MLModelWrapper>(sp =>
     //return new MLModelWrapper(mlModel, mlContext);
     return new MLModelWrapper();
 });
+
+// Add the background service to the services.
+builder.Services.AddHostedService<PredictionJob>();
+builder.Services.AddHostedService<MaintenanceCheckJob>();
 
 builder.Services.AddEndpointsApiExplorer();
 //builder.Services.AddSwaggerGen(); // add swagger NuGet package
