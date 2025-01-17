@@ -31,12 +31,12 @@ public class MachineEventsServiceTest
     }
 
     [TestMethod]
-    public async void GetEventsAsync_ReturnsEvent()
+    public async Task GetEventsAsync_ReturnsEvent()
     {
         // Arrange
         _context.MachineEvents.AddRange(
-            new MachineEvent { EventId = 1, MachineId = 1, EventCode = "E101"},
-            new MachineEvent { EventId = 2, MachineId = 2, EventCode = "E102" }
+            new MachineEvent { EventId = 1, MachineId = 1, EventCode = "E101", Description = "descr 1" },
+            new MachineEvent { EventId = 2, MachineId = 2, EventCode = "E102", Description = "descr 2" }
         );
         _context.SaveChanges();
 
